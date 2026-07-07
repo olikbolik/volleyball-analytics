@@ -1,0 +1,114 @@
+RankRank,Player NamePlayer,TeamTeam,SuccessfulSuccessful,ErrorsSE,AttemptsAttempts,Average per matchaverage-per-match,Success %Success %,TotalTA
+1,Seki,JPN,143,1,212,47.67,40.17,356
+2,Wenerska,POL,77,0,168,25.67,31.43,245
+3,Orro,ITA,70,0,165,23.33,29.79,235
+4,Roberta,BRA,66,1,109,22.0,37.5,176
+5,Macris,BRA,51,2,84,17.0,37.23,137
+6,Zhang Z.X.,CHN,35,0,70,35.0,33.33,105
+7,Poulter,USA,34,0,63,34.0,35.05,97
+8,Özbay,TUR,33,1,56,33.0,36.67,90
+9,Straube,GER,25,2,51,25.0,32.05,78
+10,Grabka,POL,20,0,56,6.67,26.32,76
+11,Cambi,ITA,18,0,49,6.0,26.87,67
+12,Tsukasa,JPN,8,0,8,4.0,50.0,16
+13,Yin X. L.,CHN,7,0,10,7.0,41.18,17
+13,Özdemir,TUR,7,0,25,7.0,21.88,32
+14,Szczygłowska,POL,4,1,34,1.33,10.26,39
+15,De Gennaro,ITA,3,1,49,1.0,5.66,53
+15,Marcelle,BRA,3,0,30,1.0,9.09,33
+16,Czyrniańska,POL,2,0,6,0.67,25.0,8
+16,Zhuang Y.S.,CHN,2,0,5,2.0,28.57,7
+16,Gabi,BRA,2,0,10,0.67,16.67,12
+16,Glaab,GER,2,1,10,2.0,15.38,13
+16,Cekulaev,GER,2,0,1,2.0,66.67,3
+16,Akimoto,JPN,2,0,1,0.67,66.67,3
+16,Shiode,JPN,2,0,3,2.0,40.0,5
+17,Danesi,ITA,1,0,11,0.33,8.33,12
+17,Sylla,ITA,1,1,7,0.33,11.11,9
+17,Egonu,ITA,1,0,6,0.33,14.29,7
+17,A. Skinner,USA,1,0,4,1.0,20.0,5
+17,Korneluk,POL,1,0,4,0.33,20.0,5
+17,Łukasik,POL,1,0,9,0.33,10.0,10
+17,Smarzek,POL,1,0,0,0.33,100.0,1
+17,Wu M.J.,CHN,1,0,3,1.0,25.0,4
+17,Ni F.F.,CHN,1,0,12,1.0,7.69,13
+17,Rosamaria,BRA,1,0,5,0.33,16.67,6
+17,Julia,BRA,1,1,5,0.33,14.29,7
+17,Bergmann,BRA,1,0,4,0.33,20.0,5
+17,Alsmeier,GER,1,0,3,1.0,25.0,4
+17,Orthmann,GER,1,0,1,1.0,50.0,2
+17,Shimamura,JPN,1,0,4,0.33,20.0,5
+17,Ishikawa,JPN,1,0,14,0.33,6.67,15
+17,Fukudome,JPN,1,0,14,0.33,6.67,15
+17,Wada,JPN,1,0,11,0.33,8.33,12
+17,Sato,JPN,1,0,7,0.33,12.5,8
+18,Gray,ITA,0,0,0,,,0
+18,Degradi,ITA,0,0,4,0.0,0.0,4
+18,Fersino,ITA,0,0,0,,,0
+18,Nwakalor L.,ITA,0,0,0,,,0
+18,Nervini,ITA,0,0,3,0.0,0.0,3
+18,Fahr,ITA,0,1,0,0.0,0.0,1
+18,Giovannini,ITA,0,0,0,,,0
+18,Antropova,ITA,0,0,2,0.0,0.0,2
+18,Hentz,USA,0,0,0,,,0
+18,Rodriguez,USA,0,0,6,0.0,0.0,6
+18,Butler,USA,0,0,0,,,0
+18,M. Skinner,USA,0,0,0,,,0
+18,Igiede,USA,0,0,2,0.0,0.0,2
+18,Rettke,USA,0,0,1,0.0,0.0,1
+18,Lanier,USA,0,0,0,,,0
+18,Franklin,USA,0,0,1,0.0,0.0,1
+18,Jimerson,USA,0,0,0,,,0
+18,Ka'aha'aina-Torres,USA,0,0,0,,,0
+18,Eggleston,USA,0,0,0,,,0
+18,Samedy,USA,0,0,1,0.0,0.0,1
+18,Gryka,POL,0,0,0,,,0
+18,Stysiak,POL,0,1,11,0.0,0.0,12
+18,Piasecka,POL,0,0,0,,,0
+18,Łysiak,POL,0,0,0,,,0
+18,Centka-Tietianiec,POL,0,0,0,,,0
+18,Damaske,POL,0,0,0,,,0
+18,Jurczyk,POL,0,0,1,0.0,0.0,1
+18,Tang X.,CHN,0,0,0,,,0
+18,Gong X.Y.,CHN,0,0,3,0.0,0.0,3
+18,Wang Y.Y.,CHN,0,0,2,0.0,0.0,2
+18,Wan Z. Y.,CHN,0,0,0,,,0
+18,Fan B. N.,CHN,0,0,0,,,0
+18,Dong Y. H.,CHN,0,0,0,,,0
+18,Chen H. Y.,CHN,0,0,4,0.0,0.0,4
+18,Wang A. Q.,CHN,0,0,0,,,0
+18,Wang M.J.,CHN,0,0,0,,,0
+18,Diana,BRA,0,0,7,0.0,0.0,7
+18,Lorena,BRA,0,0,0,,,0
+18,Helena,BRA,0,0,1,0.0,0.0,1
+18,Kisy,BRA,0,0,0,,,0
+18,Jheovana,BRA,0,0,0,,,0
+18,Tainara,BRA,0,0,0,,,0
+18,Lais,BRA,0,0,0,,,0
+18,Cesar,GER,0,0,0,,,0
+18,Pogany,GER,0,0,9,0.0,0.0,9
+18,Stautz,GER,0,0,0,,,0
+18,Stigrot,GER,0,0,1,0.0,0.0,1
+18,Weske,GER,0,0,0,,,0
+18,Schölzel,GER,0,0,0,,,0
+18,Kindermann,GER,0,1,0,0.0,0.0,1
+18,Weitzel,GER,0,0,1,0.0,0.0,1
+18,Strubbe,GER,0,0,0,,,0
+18,Araki,JPN,0,0,2,0.0,0.0,2
+18,Kojima,JPN,0,0,21,0.0,0.0,21
+18,Yamada,JPN,0,0,0,,,0
+18,Airi,JPN,0,0,2,0.0,0.0,2
+18,Iwasawa,JPN,0,0,0,,,0
+18,Kitamado,JPN,0,0,1,0.0,0.0,1
+18,Örge,TUR,0,0,5,0.0,0.0,5
+18,Aköz,TUR,0,0,2,0.0,0.0,2
+18,Vargas,TUR,0,0,3,0.0,0.0,3
+18,S. Sahin,TUR,0,0,0,,,0
+18,Baladın,TUR,0,0,3,0.0,0.0,3
+18,Uyanık,TUR,0,0,0,,,0
+18,Ozden,TUR,0,0,0,,,0
+18,Güneş,TUR,0,0,2,0.0,0.0,2
+18,Kalaç,TUR,0,0,0,,,0
+18,Erkek,TUR,0,0,3,0.0,0.0,3
+18,Karutasu,TUR,0,0,0,,,0
+18,Karakurt,TUR,0,0,0,,,0
