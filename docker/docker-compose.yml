@@ -1,7 +1,7 @@
 services:
-  db:
+  db_service:
     image: postgres:15
-    container_name: postgres_db
+    container_name: postgres_db_container
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -11,15 +11,15 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  python:
+  python_service:
     build: .
-    container_name: python_env
+    container_name: python_env_container
     ports:
       - "8888:8888"
     volumes:
-      - .:/app
+      - ..:/app
     depends_on:
-      - db
+      - db_service
 
 volumes:
   pgdata:

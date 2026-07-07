@@ -4,3 +4,6 @@ seaborn
 jupyter
 psycopg2-binary
 sqlalchemy
+requests
+beautifulsoup4
+lxml
