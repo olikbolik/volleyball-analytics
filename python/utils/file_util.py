@@ -8,4 +8,4 @@ def directory_exists(directory_path):
 def create_directory(directory_path):
     logger.debug(f"Creating directory at {directory_path}")  
     os.makedirs(directory_path)
-    logger.info(f"Directory created at {directory_path}")
+    logger.info(f"Directory successfully created at {directory_path}")

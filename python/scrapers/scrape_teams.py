@@ -15,18 +15,17 @@ headers = {"User-Agent": "Mozilla/5.0"}
 teams = []
 
 
-# function for scraping team stats by year 
-def scrape_team_stats(year: str=CURRENT_YEAR):
+# function for scraping teams by year 
+def scrape_teams(year: str=CURRENT_YEAR):
+    """ Scrapes the teams for the given year and saves them to a CSV file. """
     if not is_valid_year(year):
         return
 
-    if year == CURRENT_YEAR:
-        teams_url = f"{BASE_VNL_URL}/teams/{SEX}/?"
-    else:
-        teams_url = f"{BASE_VNL_URL}/{year}/teams/{SEX}/?"
-    logger.info(f"Scraping teams for {year} from {teams_url}")
+    teams_url = generate_teams_url(year)
+    logger.debug(f"Scraping teams for {year} from {teams_url}")
 
     try:
+        logger.debug(f"Sending GET request to {teams_url}")
         html = requests.get(teams_url, headers=headers)
         html.raise_for_status()  # Raise an exception for HTTP errors
     except requests.exceptions.HTTPError as e:
@@ -47,7 +46,11 @@ def scrape_team_stats(year: str=CURRENT_YEAR):
         if name not in teams:
             teams.append(name)
 
+    # Check if the teams directory exists, and create it if it doesn't
+    check_and_create_teams_directory(teams_dir)
+
     with open(f"{teams_dir}/teams_{year}{RAW_DATA_FILE_EXTENSION}", "w", newline="", encoding="utf-8-sig") as file:
+        logger.debug(f"Writing teams data to {teams_dir}/teams_{year}{RAW_DATA_FILE_EXTENSION}")
         writer = csv.writer(file)
         writer.writerow(["Country", "Code"])
 
@@ -59,13 +62,12 @@ def scrape_team_stats(year: str=CURRENT_YEAR):
                 code = match.group(2)
                 writer.writerow([country, code])
 
-    print(f"Teams for {year} scraped successfully!")
-    #print(teams)
+    logger.info(f"Teams for {year} scraped successfully!")
+    logger.debug(f"Teams: {teams} written to {teams_dir}/teams_{year}{RAW_DATA_FILE_EXTENSION}")
 
 
-
-# Create the directory for teams if it doesn't exist
 def check_and_create_teams_directory(teams_dir):
+    """ Checks if the teams directory exists, and creates it if it doesn't. """
     logger.debug(f"Checking if teams directory exists at {teams_dir}")
 
     if not directory_exists(teams_dir):
@@ -74,12 +76,12 @@ def check_and_create_teams_directory(teams_dir):
 
 
 
-check_and_create_teams_directory(teams_dir)
 
 if len(sys.argv) <= 1:
    logger.warning("No arguments were given")
    logger.debug("Fetching teams for the current year...")
-   scrape_team_stats(CURRENT_YEAR)
+   scrape_teams(CURRENT_YEAR)
+   logger.debug(f"Fetched teams for {CURRENT_YEAR} successfully")
 
 else:
     logger.info(f"Arguments received: {sys.argv[1:]}")
@@ -88,4 +90,6 @@ else:
 
     for arg in sys.argv[1:]:
         logger.debug(f"Fetching teams for year {arg}...")
-        scrape_team_stats(arg)
+        scrape_teams(arg)
+        logger.debug(f"Fetched teams for {arg} successfully")
+
