@@ -1,0 +1,7 @@
+{
+    "name": "volleyball-dev",
+    "dockerComposeFile": "../docker/docker-compose.yml",
+    "service": "python_service",
+    "workspaceFolder": "/app",
+    "shutdownAction": "stopCompose"
+}
