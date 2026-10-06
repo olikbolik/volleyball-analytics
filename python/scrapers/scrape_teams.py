@@ -7,21 +7,18 @@ from bs4 import BeautifulSoup
 
 from logger import logger
 from utils.file_util import directory_exists, create_directory
-from utils.validation import is_valid_year
-from constants import BASE_VNL_URL, CURRENT_YEAR, SEX, DATA_DIR, RAW_DATA_FILE_EXTENSION
+from utils.validation import is_valid_year, validate_arguments
+from utils.url import generate_teams_url
+from constants import CURRENT_YEAR, DATA_DIR, RAW_DATA_FILE_EXTENSION
     
-teams_dir = f"{DATA_DIR}/teams"
+data_to_scrape = "teams"
 headers = {"User-Agent": "Mozilla/5.0"}
-teams = []
 
 
 # function for scraping teams by year 
-def scrape_teams(year: str=CURRENT_YEAR):
-    """ Scrapes the teams for the given year and saves them to a CSV file. """
-    if not is_valid_year(year):
-        return
-
-    teams_url = generate_teams_url(year)
+def scrape_teams(year: str=CURRENT_YEAR, sex: str="women"):
+    """ Scrapes the teams for the given year and sex and saves them to a CSV file. """
+    teams_url = generate_teams_url(year, sex)
     logger.debug(f"Scraping teams for {year} from {teams_url}")
 
     try:
@@ -36,21 +33,47 @@ def scrape_teams(year: str=CURRENT_YEAR):
         return
 
     html.encoding = 'utf-8'  # Set the encoding to UTF-8
-    soup = BeautifulSoup(html.text, "html.parser")
+    teams = parse_team_names(html.text)  # Call the function to parse team names
+
+    # Check if the teams directory exists, and create it if it doesn't
+    teams_dir = check_and_create_teams_directory(year, sex, data_to_scrape)
+    teams_file_path = f"{teams_dir}/teams_{year}_{sex}{RAW_DATA_FILE_EXTENSION}"
+
+    write_teams_to_csv(teams, teams_file_path)  # Call the function to write teams to CSV
+
+
+
+def parse_team_names(html_content: str) -> list:
+    """ Parses the HTML content to extract team names. """
+    soup = BeautifulSoup(html_content, "html.parser")
+    teams = []
 
     for a in soup.select('a[href*="/teams/"]'):
         name = a.get_text(strip=True)
-
         if name in ["Teams", "Men's", "Women's"]:
             continue
         if name not in teams:
             teams.append(name)
+    return teams
 
-    # Check if the teams directory exists, and create it if it doesn't
-    check_and_create_teams_directory(teams_dir)
 
-    with open(f"{teams_dir}/teams_{year}{RAW_DATA_FILE_EXTENSION}", "w", newline="", encoding="utf-8-sig") as file:
-        logger.debug(f"Writing teams data to {teams_dir}/teams_{year}{RAW_DATA_FILE_EXTENSION}")
+def check_and_create_teams_directory(year: str, sex: str, data_to_scrape: str) -> str:
+    """ Checks if the teams directory exists, and creates it if it doesn't. """
+    teams_dir = f"{DATA_DIR}/{sex}/{year}/{data_to_scrape}"
+    logger.debug(f"Checking if teams directory exists at {teams_dir}...")
+
+    if not directory_exists(teams_dir):
+        logger.debug(f"Teams directory does not exist. Creating directory at {teams_dir}")
+        create_directory(teams_dir)
+        logger.debug(f"Teams directory created at {teams_dir}.")
+    return teams_dir
+
+
+def write_teams_to_csv(teams: list, teams_file_path: str) -> None:
+    """ Writes the list of teams to a CSV file. """
+    logger.debug(f"Writing teams data to {teams_file_path}...")
+
+    with open(teams_file_path, "w", newline="", encoding="utf-8-sig") as file:
         writer = csv.writer(file)
         writer.writerow(["Country", "Code"])
 
@@ -62,34 +85,15 @@ def scrape_teams(year: str=CURRENT_YEAR):
                 code = match.group(2)
                 writer.writerow([country, code])
 
-    logger.info(f"Teams for {year} scraped successfully!")
-    logger.debug(f"Teams: {teams} written to {teams_dir}/teams_{year}{RAW_DATA_FILE_EXTENSION}")
-
-
-def check_and_create_teams_directory(teams_dir):
-    """ Checks if the teams directory exists, and creates it if it doesn't. """
-    logger.debug(f"Checking if teams directory exists at {teams_dir}")
-
-    if not directory_exists(teams_dir):
-        logger.debug(f"Teams directory does not exist. Creating directory at {teams_dir}")
-        create_directory(teams_dir)
+    logger.debug(f"Teams: {teams} written to {teams_file_path}.")
 
 
 
+# function to validate arguments
+years_to_scrape, gender_to_scrape = validate_arguments(sys.argv)
 
-if len(sys.argv) <= 1:
-   logger.warning("No arguments were given")
-   logger.debug("Fetching teams for the current year...")
-   scrape_teams(CURRENT_YEAR)
-   logger.debug(f"Fetched teams for {CURRENT_YEAR} successfully")
-
-else:
-    logger.info(f"Arguments received: {sys.argv[1:]}")
-    #https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/2025/teams/women/?
-    #https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/?
-
-    for arg in sys.argv[1:]:
-        logger.debug(f"Fetching teams for year {arg}...")
-        scrape_teams(arg)
-        logger.debug(f"Fetched teams for {arg} successfully")
+for year in years_to_scrape:
+    logger.info(f"Fetching {gender_to_scrape} teams for year {year}...")
+    scrape_teams(year, gender_to_scrape)
+    logger.info(f"Fetched {gender_to_scrape} teams for {year} year successfully.")
 
