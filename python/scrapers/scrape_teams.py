@@ -5,11 +5,11 @@ import os
 import sys
 from bs4 import BeautifulSoup
 
-from logger import logger
-from utils.file_util import directory_exists, create_directory
-from utils.validation import is_valid_year, validate_arguments
-from utils.url import generate_teams_url
-from constants import CURRENT_YEAR, DATA_DIR, RAW_DATA_FILE_EXTENSION
+from python.utils.logger import logger
+from python.utils.file_util import directory_exists, create_directory
+from python.utils.validation import is_valid_year, validate_arguments
+from python.utils.url import generate_teams_url
+from python.utils.constants import CURRENT_YEAR, DATA_DIR, RAW_DATA_FILE_EXTENSION
     
 data_to_scrape = "teams"
 headers = {"User-Agent": "Mozilla/5.0"}

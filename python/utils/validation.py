@@ -1,5 +1,5 @@
-from logger import logger
-from constants import CURRENT_YEAR, SEX_FEMALE, SEX_MALE
+from python.utils.logger import logger
+from python.utils.constants import CURRENT_YEAR, SEX_FEMALE, SEX_MALE
 
 
 def is_valid_year(year: str) -> bool:
@@ -7,11 +7,11 @@ def is_valid_year(year: str) -> bool:
     
     if not year.isdigit():
         return False
-    logger.debug(f"Validating year: {year}")
+    logger.debug(f"Validating year: {year}...")
     if len(year) != 4:
         logger.error(f"Invalid year format: {year}. Please provide a valid 4-digit year.")
         return False
-    logger.debug(f"Year validation successful")
+    logger.debug(f"Year validation successful.")
     return True
 
 
@@ -21,7 +21,7 @@ def get_gender_label(sex: str) -> str:
     female_terms = ["female", "women", "woman", "f", "w"]
     male_terms = ["male", "men", "man", "m"]
 
-    logger.debug(f"Getting gender label for sex: {sex}")
+    logger.debug(f"Getting gender label for sex: {sex}...")
     if sex.lower() in female_terms:
         return "women"
     elif sex.lower() in male_terms:
@@ -32,13 +32,13 @@ def get_gender_label(sex: str) -> str:
 
 def validate_arguments(args: list) -> tuple[list[str], str]:
     """ Validates the command line arguments for years and gender. """
-    logger.debug(f"Validating command line arguments: {args}")
+    logger.info(f"Validating command line arguments: {args}...")
     years = []
     sex = SEX_FEMALE  # Default to women if not specified
 
-    if len(sys.argv) <= 1:
+    if len(args) <= 1:
         years.append(CURRENT_YEAR)
-        logger.warning("No arguments were given. Defaulting to current year and women teams.")
+        logger.debug("No arguments were given. Defaulting to current year and women teams.")
         return years, sex        
 
     for arg in args[1:]:
@@ -48,9 +48,9 @@ def validate_arguments(args: list) -> tuple[list[str], str]:
             sex = get_gender_label(arg)
 
     if not years:
-        logger.info("No valid years provided. Defaulting to current year.")
+        logger.debug("No valid years provided. Defaulting to current year.")
         years.append(CURRENT_YEAR)
 
-    logger.debug(f"Validated years: {years}, sex: {sex}")
+    logger.debug(f"Validated years: {years}, sex: {sex}.")
     return years, sex
 
