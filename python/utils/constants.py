@@ -4,14 +4,16 @@
 # https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/statistics/women/best-scorers/?
 
 
+
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 DATA_DIR = BASE_DIR/"data"
 RAW_DATA_FILE_EXTENSION = ".csv"
 
 BASE_VNL_URL = "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league"
+BACKUP_VNL_URL = "https://vnlw.volleystation.com/en/stat-rankings"
 CURRENT_YEAR = "2026"
 SEX_FEMALE = "women"
 SEX_MALE = "men"

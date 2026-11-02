@@ -11,6 +11,9 @@ def is_valid_year(year: str) -> bool:
     if len(year) != 4:
         logger.error(f"Invalid year format: {year}. Please provide a valid 4-digit year.")
         return False
+    if int(year) > int(CURRENT_YEAR) or int(year) < 2021:
+        logger.error(f"Year out of range: {year}. Please provide a year between 2021 and {CURRENT_YEAR}.")
+        return False
     logger.debug(f"Year validation successful.")
     return True
 
@@ -44,12 +47,11 @@ def validate_arguments(args: list) -> tuple[list[str], str]:
     for arg in args[1:]:
         if is_valid_year(arg):
             years.append(arg)
-        else:
-            sex = get_gender_label(arg)
-
     if not years:
         logger.debug("No valid years provided. Defaulting to current year.")
         years.append(CURRENT_YEAR)
+
+    sex = get_gender_label(args[-1])  # Use the last argument as the gender
 
     logger.debug(f"Validated years: {years}, sex: {sex}.")
     return years, sex

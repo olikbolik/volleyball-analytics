@@ -1,7 +1,6 @@
 import requests
 import csv
 import re
-import os
 import sys
 from bs4 import BeautifulSoup
 
@@ -9,14 +8,14 @@ from python.utils.logger import logger
 from python.utils.file_util import directory_exists, create_directory
 from python.utils.validation import is_valid_year, validate_arguments
 from python.utils.url import generate_teams_url
-from python.utils.constants import CURRENT_YEAR, DATA_DIR, RAW_DATA_FILE_EXTENSION
+from python.utils.constants import CURRENT_YEAR, SEX_FEMALE, DATA_DIR, RAW_DATA_FILE_EXTENSION
     
 data_to_scrape = "teams"
 headers = {"User-Agent": "Mozilla/5.0"}
 
 
 # function for scraping teams by year 
-def scrape_teams(year: str=CURRENT_YEAR, sex: str="women"):
+def scrape_teams(year: str=CURRENT_YEAR, sex: str=SEX_FEMALE):
     """ Scrapes the teams for the given year and sex and saves them to a CSV file. """
     teams_url = generate_teams_url(year, sex)
     logger.debug(f"Scraping teams for {year} from {teams_url}")
@@ -37,9 +36,7 @@ def scrape_teams(year: str=CURRENT_YEAR, sex: str="women"):
 
     # Check if the teams directory exists, and create it if it doesn't
     teams_dir = check_and_create_teams_directory(year, sex, data_to_scrape)
-    teams_file_path = f"{teams_dir}/teams_{year}_{sex}{RAW_DATA_FILE_EXTENSION}"
-
-    write_teams_to_csv(teams, teams_file_path)  # Call the function to write teams to CSV
+    write_teams_to_csv(teams, teams_dir, year, sex)  # Call the function to write teams to CSV
 
 
 
@@ -60,18 +57,18 @@ def parse_team_names(html_content: str) -> list:
 def check_and_create_teams_directory(year: str, sex: str, data_to_scrape: str) -> str:
     """ Checks if the teams directory exists, and creates it if it doesn't. """
     teams_dir = f"{DATA_DIR}/{sex}/{year}/{data_to_scrape}"
-    logger.debug(f"Checking if teams directory exists at {teams_dir}...")
 
     if not directory_exists(teams_dir):
-        logger.debug(f"Teams directory does not exist. Creating directory at {teams_dir}")
+        logger.debug(f"Teams directory does not exist.")
         create_directory(teams_dir)
-        logger.debug(f"Teams directory created at {teams_dir}.")
     return teams_dir
 
 
-def write_teams_to_csv(teams: list, teams_file_path: str) -> None:
+def write_teams_to_csv(teams: list, teams_dir: str, year: str, sex: str) -> None:
     """ Writes the list of teams to a CSV file. """
+    teams_file_path = f"{teams_dir}/teams_{year}_{sex}{RAW_DATA_FILE_EXTENSION}"
     logger.debug(f"Writing teams data to {teams_file_path}...")
+
 
     with open(teams_file_path, "w", newline="", encoding="utf-8-sig") as file:
         writer = csv.writer(file)
