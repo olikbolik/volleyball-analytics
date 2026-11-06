@@ -32,7 +32,7 @@ def scrape_teams(year: str=CURRENT_YEAR, sex: str=SEX_FEMALE):
         return
 
     html.encoding = 'utf-8'  # Set the encoding to UTF-8
-    teams = parse_team_names(html.text)  # Call the function to parse team names
+    teams = parse_teams_data(html.text)  # Call the function to parse team data
 
     # Check if the teams directory exists, and create it if it doesn't
     teams_dir = check_and_create_teams_directory(year, sex, data_to_scrape)
@@ -40,17 +40,24 @@ def scrape_teams(year: str=CURRENT_YEAR, sex: str=SEX_FEMALE):
 
 
 
-def parse_team_names(html_content: str) -> list:
-    """ Parses the HTML content to extract team names. """
+def parse_teams_data(html_content: str) -> list:
+    """ Parses the HTML content to extract team data. """
     soup = BeautifulSoup(html_content, "html.parser")
     teams = []
 
     for a in soup.select('a[href*="/teams/"]'):
         name = a.get_text(strip=True)
+        link = a.get("href", "")
         if name in ["Teams", "Men's", "Women's"]:
             continue
-        if name not in teams:
-            teams.append(name)
+        else:
+            name_match = re.match(r"(.+?)([A-Z]{3})$", name)
+            id_match = re.search(r"/teams/women/(\d+)/schedule/", link)
+            country = name_match.group(1).strip()
+            code = name_match.group(2)
+            team_id = id_match.group(1)
+            if name_match and id_match:
+                teams.append((country, code, team_id))
     return teams
 
 
@@ -72,17 +79,11 @@ def write_teams_to_csv(teams: list, teams_dir: str, year: str, sex: str) -> None
 
     with open(teams_file_path, "w", newline="", encoding="utf-8-sig") as file:
         writer = csv.writer(file)
-        writer.writerow(["Country", "Code"])
+        writer.writerow(["Country", "Code", "ID"])
 
-        for team in teams:
-            match = re.match(r"(.+?)([A-Z]{3})$", team)
+        writer.writerows(teams)
 
-            if match:
-                country = match.group(1).strip()
-                code = match.group(2)
-                writer.writerow([country, code])
-
-    logger.debug(f"Teams: {teams} written to {teams_file_path}.")
+    logger.debug(f"Teams written to {teams_file_path}.")
 
 
 
@@ -93,4 +94,3 @@ for year in years_to_scrape:
     logger.info(f"Fetching {gender_to_scrape} teams for year {year}...")
     scrape_teams(year, gender_to_scrape)
     logger.info(f"Fetched {gender_to_scrape} teams for {year} year successfully.")
-
