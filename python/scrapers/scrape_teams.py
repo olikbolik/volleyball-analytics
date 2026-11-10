@@ -5,39 +5,43 @@ import sys
 from bs4 import BeautifulSoup
 
 from python.utils.logger import logger
-from python.utils.file_util import directory_exists, create_directory
-from python.utils.validation import is_valid_year, validate_arguments
-from python.utils.url import generate_teams_url
+from python.utils.file_util import directory_exists, create_directory, build_directory_path
+from python.utils.validation import validate_arguments
+from python.utils.url import generate_teams_url, generate_players_url
+from python.utils.web_utils import fetch_html
 from python.utils.constants import CURRENT_YEAR, SEX_FEMALE, DATA_DIR, RAW_DATA_FILE_EXTENSION
     
-data_to_scrape = "teams"
+data_to_scrape = ["teams", "players"]
 headers = {"User-Agent": "Mozilla/5.0"}
 
 
-# function for scraping teams by year 
-def scrape_teams(year: str=CURRENT_YEAR, sex: str=SEX_FEMALE):
-    """ Scrapes the teams for the given year and sex and saves them to a CSV file. """
-    teams_url = generate_teams_url(year, sex)
-    logger.debug(f"Scraping teams for {year} from {teams_url}")
+def scrape_teams(year: str=CURRENT_YEAR, sex: str=SEX_FEMALE) -> None:
+    """ Scrapes teams and players for the given year and sex and saves them to a CSV file. """
 
-    try:
-        logger.debug(f"Sending GET request to {teams_url}")
-        html = requests.get(teams_url, headers=headers)
-        html.raise_for_status()  # Raise an exception for HTTP errors
-    except requests.exceptions.HTTPError as e:
-        logger.error(f"HTTP error occurred while fetching data for year {year}: {e}")
+    teams = scrape_teams_info(year, sex)
+    if not teams:
+        logger.error(f"No teams found for {sex} in {year}.")
         return
-    except requests.exceptions.RequestException as e:
-        logger.error(f"Error fetching data for year {year}: {e}")
-        return
-
-    html.encoding = 'utf-8'  # Set the encoding to UTF-8
-    teams = parse_teams_data(html.text)  # Call the function to parse team data
-
+    
     # Check if the teams directory exists, and create it if it doesn't
-    teams_dir = check_and_create_teams_directory(year, sex, data_to_scrape)
+    teams_dir = check_and_create_teams_directory(year, sex, data_to_scrape[0])
     write_teams_to_csv(teams, teams_dir, year, sex)  # Call the function to write teams to CSV
 
+    players = scrape_players_info(year, sex)
+    players_dir = check_and_create_players_directory(year, sex, data_to_scrape[1])
+    write_players_to_csv(players, players_dir, year, sex)  # Call the function to write players to CSV 
+
+
+def scrape_teams_info(year: str, sex: str) -> list:
+    teams_url = generate_teams_url(year, sex)
+    logger.debug(f"Scraping teams for {year} from {teams_url}")
+    teams_html = fetch_html(teams_url)
+
+    if not teams_html:
+        logger.error(f"Failed to fetch {sex} teams data for {year}")
+        return []
+
+    return parse_teams_data(teams_html.text)
 
 
 def parse_teams_data(html_content: str) -> list:
@@ -61,9 +65,10 @@ def parse_teams_data(html_content: str) -> list:
     return teams
 
 
-def check_and_create_teams_directory(year: str, sex: str, data_to_scrape: str) -> str:
+def check_and_create_teams_directory(year: str, sex: str) -> Path:
     """ Checks if the teams directory exists, and creates it if it doesn't. """
-    teams_dir = f"{DATA_DIR}/{sex}/{year}/{data_to_scrape}"
+    # teams_dir = f"{DATA_DIR}/{sex}/{year}/{data_to_scrape}"
+    teams_dir = build_directory_path(sex, year, data_to_scrape)
 
     if not directory_exists(teams_dir):
         logger.debug(f"Teams directory does not exist.")
@@ -71,7 +76,7 @@ def check_and_create_teams_directory(year: str, sex: str, data_to_scrape: str) -
     return teams_dir
 
 
-def write_teams_to_csv(teams: list, teams_dir: str, year: str, sex: str) -> None:
+def write_teams_to_csv(teams: list, teams_dir: Path, year: str, sex: str) -> None:
     """ Writes the list of teams to a CSV file. """
     teams_file_path = f"{teams_dir}/teams_{year}_{sex}{RAW_DATA_FILE_EXTENSION}"
     logger.debug(f"Writing teams data to {teams_file_path}...")
@@ -85,6 +90,14 @@ def write_teams_to_csv(teams: list, teams_dir: str, year: str, sex: str) -> None
 
     logger.debug(f"Teams written to {teams_file_path}.")
 
+
+def scrape_players_info(year: str=CURRENT_YEAR, sex: str=SEX_FEMALE) -> None:
+    """ Scrapes the players for the given year, sex and teams and saves them to a CSV file. """
+    pass  # Placeholder for the actual implementation of scraping players info
+
+
+def write_players_to_csv(players: list, players_dir: Path, year: str, sex: str) -> None:
+    pass
 
 
 # function to validate arguments
